@@ -44,7 +44,7 @@ fun SignInScreen(navController: NavController,) {
                 viewModel = viewModel,
                 event = viewModel::onEvent,
                 navigateToSignUp = { navController.popBackStack() },
-                navigateToHome = { navController.navigate(Screen.HOME.name)}
+                navigateToCreateProfile = { navController.navigate(Screen.CREATE_PROFILE.name)}
             )
         }
     }
@@ -55,7 +55,7 @@ fun SignInScreenContent(
     viewModel: SignInViewModel,
     event:(SignInEvent) -> Unit,
     navigateToSignUp: () -> Unit,
-    navigateToHome:() -> Unit
+    navigateToCreateProfile:() -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
@@ -68,7 +68,7 @@ fun SignInScreenContent(
     }
 
     LaunchedEffect (state.navigateToHome){
-        if (state.navigateToHome) navigateToHome()
+        if (state.navigateToHome) navigateToCreateProfile()
     }
 
     Column(

@@ -78,4 +78,6 @@ dependencies {
     implementation(libs.firebase.auth)
     //firebase firestore
     implementation(libs.firebase.firestore)
+    // firebase realtime database
+    implementation("com.google.firebase:firebase-database")
 }

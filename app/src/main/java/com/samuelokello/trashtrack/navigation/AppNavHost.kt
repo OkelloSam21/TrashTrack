@@ -5,9 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.samuelokello.trashtrack.ui.presentation.shared.auth.CreateProfileScreen
+import com.samuelokello.trashtrack.ui.presentation.shared.auth.create_profile.CreateProfileScreen
 import com.samuelokello.trashtrack.ui.presentation.shared.auth.sign_in.SignInScreen
-import com.samuelokello.trashtrack.ui.presentation.shared.auth.sign_up.SIgnUpVIewModel
 import com.samuelokello.trashtrack.ui.presentation.shared.auth.sign_up.SignUpScreen
 import com.samuelokello.trashtrack.ui.presentation.shared.welcome.WelcomeScreen
 import com.samuelokello.trashtrack.ui.presentation.worker.Home

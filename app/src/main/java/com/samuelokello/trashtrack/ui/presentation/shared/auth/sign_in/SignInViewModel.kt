@@ -37,11 +37,13 @@ class SignInViewModel :ViewModel() {
                 }
             }
 
-            SignInEvent.NavigateToHome -> {
+            SignInEvent.NavigateToProfileCreation -> {
                 _state.update {
                     it.copy(navigateToHome = true)
                 }
             }
+
+            else -> {}
         }
     }
 
@@ -51,7 +53,7 @@ class SignInViewModel :ViewModel() {
             if (task.isSuccessful) {
                 Log.d(TAG, "signInWithEmail:success")
                 Toast.makeText(context, "Authentication Successful", Toast.LENGTH_LONG).show()
-                val user = auth.currentUser
+                auth.currentUser
                 _state.update {
                     it.copy(navigateToHome = true)
                 }
@@ -84,5 +86,5 @@ sealed interface SignInEvent {
     data class PasswordChanged(val password: String) : SignInEvent
     data class SignInClicked (val email: String, val password: String, val context: Context): SignInEvent
     object NavigateToSignUp : SignInEvent
-    object NavigateToHome: SignInEvent
+    object NavigateToProfileCreation: SignInEvent
 }
