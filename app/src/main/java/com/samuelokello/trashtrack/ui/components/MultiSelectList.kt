@@ -26,6 +26,10 @@ fun MultiSelectList(
                 Checkbox(
                     checked = selectedItems.value[index],
                     onCheckedChange = { isChecked ->
+                        val updateItems = selectedItems.value.toMutableList()
+                        updateItems[index] = isChecked
+                        selectedItems.value = updateItems
+
                         onSelectedChange(index, isChecked)
                     }
                 )
