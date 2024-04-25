@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TrashTrack</string>
+    <string name="signUp">Sign Up</string>
+    <string name="sign_in">Sign In</string>
+</resources>

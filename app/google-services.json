@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "425905646850",
+    "project_id": "trashtrack-3e7d6",
+    "storage_bucket": "trashtrack-3e7d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425905646850:android:e7c323b9f67f5ed5bf261b",
+        "android_client_info": {
+          "package_name": "com.samuelokello.trashtrack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF8XP1IDsDuZEhhMpThzgaciqVfolpeE0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
