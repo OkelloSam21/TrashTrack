@@ -10,7 +10,7 @@ import com.samuelokello.trashtrack.ui.presentation.shared.auth.sign_in.SignInScr
 import com.samuelokello.trashtrack.ui.presentation.shared.auth.sign_up.SignUpScreen
 import com.samuelokello.trashtrack.ui.presentation.shared.welcome.WelcomeScreen
 import com.samuelokello.trashtrack.ui.presentation.worker.Home
-import com.samuelokello.trashtrack.ui.presentation.worker.report_waste.ReportWaste
+import com.samuelokello.trashtrack.ui.presentation.worker.report_waste.ReportWasteScreen
 import com.samuelokello.trashtrack.ui.presentation.worker.request_pick_up.RequestPickupScreen
 
 @Composable
@@ -46,7 +46,7 @@ fun AppNavHost(
             RequestPickupScreen(navController = navController)
         }
         composable(NavigationItem.Report.route) {
-            ReportWaste(navController = navController)
+            ReportWasteScreen(navController = navController)
         }
     }
 }

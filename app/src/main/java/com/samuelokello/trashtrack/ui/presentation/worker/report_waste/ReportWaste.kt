@@ -1,31 +1,54 @@
 package com.samuelokello.trashtrack.ui.presentation.worker.report_waste
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.samuelokello.trashtrack.ui.components.CustomButton
 import com.samuelokello.trashtrack.ui.components.DatePicker
+import com.samuelokello.trashtrack.ui.components.HandleLoading
 import com.samuelokello.trashtrack.ui.components.MultiSelectList
 import com.samuelokello.trashtrack.ui.components.TextFieldComponent
 import com.samuelokello.trashtrack.ui.theme.TrashTrackTheme
 
 @Composable
-fun ReportWaste( navController: NavController) {
-    var location by remember { mutableStateOf("") }
+fun ReportWasteScreen(navController: NavController) {
+    Surface(modifier = Modifier.fillMaxSize()) {
+        TrashTrackTheme {
+            val viewModel: ReportViewModel = viewModel()
+            ReportWasteScreenContent(
+                viewModel = viewModel,
+                event = { event ->
+                    viewModel.onEvent(event)
+                },
+                navigateBack = { navController.popBackStack() }
+            )
+        }
+    }
+}
+
+@Composable
+fun ReportWasteScreenContent(
+    viewModel: ReportViewModel,
+    event:(ReportEvent) -> Unit,
+    navigateBack: () -> Unit
+) {
+    val state by viewModel.state.collectAsState()
+    val context = LocalContext.current
     val wasteType by remember {
         mutableStateOf(
             listOf(
@@ -40,17 +63,27 @@ fun ReportWaste( navController: NavController) {
         mutableStateOf(mutableStateOf(List(wasteType.size) { false }))
     }
 
+    if (state.isLoading) HandleLoading()
+
+    LaunchedEffect(state.navigateToHome) {
+        if (state.navigateToHome) navigateBack()
+    }
 
     Column(modifier = Modifier.padding(16.dp)) {
-        Text(text = "Request Pickup", style = MaterialTheme.typography.bodyLarge)
+        Text(text = "Report Waste", style = MaterialTheme.typography.bodyLarge)
         Spacer(modifier = Modifier.height(32.dp))
 
-        Text(text = "Select Date", style = MaterialTheme.typography.bodyMedium)
+        Text(text = "Location", style = MaterialTheme.typography.bodyMedium)
         TextFieldComponent(
-            value = location,
-            onValueChange = { location = it },
+            value = state.wasteLocation,
+            onValueChange = { event(ReportEvent.WasteLocationChanged(it)) },
             placeholder = "Location",
-            trailingIcon = {}
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = "Location"
+                )
+            }
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "Select Date", style = MaterialTheme.typography.bodyMedium)
@@ -66,8 +99,14 @@ fun ReportWaste( navController: NavController) {
         }
         Spacer(modifier = Modifier.height(32.dp))
         CustomButton(
-            buttonText = "Submit Request",
-            onClick = {
-        })
+            buttonText = "Report Waste",
+            onClick = { event(ReportEvent.OnSubmitClicked(
+                state.wasteLocation,
+                state.wasteType,
+                state.date,
+                context = context,
+            )
+            ) }
+        )
     }
 }
