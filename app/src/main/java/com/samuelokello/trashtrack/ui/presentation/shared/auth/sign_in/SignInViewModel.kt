@@ -52,19 +52,26 @@ class SignInViewModel : ViewModel() {
     }
 
     private fun firebaseSignIn(email: String, password: String, context: Context) {
+        showLoading()
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
+                hideLoading()
                 if (task.isSuccessful) {
                     Log.d(TAG, "signInWithEmail:success")
                     Toast.makeText(context, "Authentication Successful", Toast.LENGTH_LONG).show()
                     auth.currentUser
                     if (isAdmin(User(email = email))) {
                         _state.update {
-                            it.copy(navigateToAdminHome = true)
+                            it.copy(
+                                isLoading = false,
+                                navigateToAdminHome = true
+                            )
                         }
                     } else {
                         _state.update {
-                            it.copy(navigateToUserHome = true)
+                            it.copy(
+                                isLoading = false,
+                                navigateToUserHome = true)
                         }
                     }
                 } else {
@@ -87,6 +94,14 @@ class SignInViewModel : ViewModel() {
                 }
             }
 
+    }
+
+    private fun showLoading() {
+        _state.update { it.copy(isLoading = true) }
+    }
+
+    private fun hideLoading() {
+        _state.update { it.copy(isLoading = false) }
     }
 }
 

@@ -20,16 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.samuelokello.trashtrack.R
+import com.samuelokello.trashtrack.data.local.User
 import com.samuelokello.trashtrack.navigation.Screen
 import com.samuelokello.trashtrack.ui.components.CustomButton
 import com.samuelokello.trashtrack.ui.components.HandleLoading
 import com.samuelokello.trashtrack.ui.components.PasswordFieldComponent
 import com.samuelokello.trashtrack.ui.components.TextFieldComponent
-import com.samuelokello.trashtrack.ui.presentation.shared.auth.sign_up.SIgnUpVIewModel
-import com.samuelokello.trashtrack.ui.presentation.shared.auth.sign_up.SignUpEvent
-import com.samuelokello.trashtrack.ui.presentation.shared.auth.sign_up.SignUpUiState
 import com.samuelokello.trashtrack.ui.theme.TrashTrackTheme
 
 @Composable
@@ -44,7 +41,8 @@ fun SignInScreen(navController: NavController,) {
                 viewModel = viewModel,
                 event = viewModel::onEvent,
                 navigateToSignUp = { navController.popBackStack() },
-                navigateToCreateProfile = { navController.navigate(Screen.CREATE_PROFILE.name)}
+                navigateToCreateProfile = { navController.navigate(Screen.CREATE_PROFILE.name)},
+                navigateToAdmin = { navController.navigate(Screen.ADMIN.name) }
             )
         }
     }
@@ -55,7 +53,8 @@ fun SignInScreenContent(
     viewModel: SignInViewModel,
     event:(SignInEvent) -> Unit,
     navigateToSignUp: () -> Unit,
-    navigateToCreateProfile:() -> Unit
+    navigateToCreateProfile:() -> Unit,
+    navigateToAdmin:() -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
@@ -67,8 +66,11 @@ fun SignInScreenContent(
         if (state.navigateToSignUp) navigateToSignUp()
     }
 
-    LaunchedEffect (state.navigateToHome){
-        if (state.navigateToHome) navigateToCreateProfile()
+    LaunchedEffect (state.navigateToUserHome){
+        if (state.navigateToUserHome) navigateToCreateProfile()
+    }
+    LaunchedEffect(state.navigateToAdminHome){
+        if (state.navigateToAdminHome) navigateToAdmin()
     }
 
     Column(
@@ -137,11 +139,13 @@ fun SignInScreenContent(
         CustomButton(
             buttonText = "Sign In",
             onClick = {
+                val user = User(email = state.email)
                 event(
                     SignInEvent.SignInClicked(
                     state.email,
                         state.password,
-                        context
+                        context,
+                        user = user,
                 ))
             }
         )
