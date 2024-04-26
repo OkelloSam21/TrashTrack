@@ -1,15 +1,20 @@
 package com.samuelokello.trashtrack.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.samuelokello.trashtrack.data.local.AppDatabase
+import com.samuelokello.trashtrack.data.repository.RoomUserRepository
+import com.samuelokello.trashtrack.ui.presentation.admin.AdminHomeScreen
 import com.samuelokello.trashtrack.ui.presentation.shared.auth.create_profile.CreateProfileScreen
 import com.samuelokello.trashtrack.ui.presentation.shared.auth.sign_in.SignInScreen
 import com.samuelokello.trashtrack.ui.presentation.shared.auth.sign_up.SignUpScreen
 import com.samuelokello.trashtrack.ui.presentation.shared.welcome.WelcomeScreen
-import com.samuelokello.trashtrack.ui.presentation.worker.Home
+import com.samuelokello.trashtrack.ui.presentation.worker.UserHomeScreen
 import com.samuelokello.trashtrack.ui.presentation.worker.report_waste.ReportWasteScreen
 import com.samuelokello.trashtrack.ui.presentation.worker.request_pick_up.RequestPickupScreen
 
@@ -19,34 +24,30 @@ fun AppNavHost(
     navController: NavHostController,
     startDestination: String = NavigationItem.Welcome.route,
 ) {
+    val context = LocalContext.current
+    val db = AppDatabase.getDatabase(context)
+    val userDao = db.userDao()
+    val repository = RoomUserRepository(userDao = userDao)
+    val viewModel = AppViewModel(repository)
+
+    LaunchedEffect(viewModel) {
+        viewModel.navigationEvent.observeForever{ screen ->
+            navController.navigate(screen.name)
+        }
+    }
+
     NavHost(
         modifier = modifier,
         navController = navController,
         startDestination = startDestination
     ) {
-        composable(NavigationItem.Welcome.route) {
-            WelcomeScreen(navController)
-        }
-        composable(NavigationItem.Signup.route) {
-            SignUpScreen(navController )
-        }
-        composable(NavigationItem.signin.route) {
-            SignInScreen(navController)
-        }
-        composable(NavigationItem.CreateProfile.route) {
-            CreateProfileScreen(navController)
-        }
-        composable(NavigationItem.CreateProfile.route) {
-             CreateProfileScreen(navController = navController )
-        }
-        composable(NavigationItem.Home.route) {
-            Home(navController)
-        }
-        composable(NavigationItem.Request.route) {
-            RequestPickupScreen(navController = navController)
-        }
-        composable(NavigationItem.Report.route) {
-            ReportWasteScreen(navController = navController)
-        }
+        composable(NavigationItem.Welcome.route) { WelcomeScreen(navController) }
+        composable(NavigationItem.Signup.route) { SignUpScreen(navController) }
+        composable(NavigationItem.signin.route) { SignInScreen(navController) }
+        composable(NavigationItem.CreateProfile.route) { CreateProfileScreen(navController) }
+        composable(NavigationItem.Home.route) { UserHomeScreen(navController = navController) }
+        composable(NavigationItem.Admin.route) { AdminHomeScreen(navController = navController) }
+        composable(NavigationItem.Request.route) { RequestPickupScreen(navController) }
+        composable(NavigationItem.Report.route) { ReportWasteScreen(navController) }
     }
 }

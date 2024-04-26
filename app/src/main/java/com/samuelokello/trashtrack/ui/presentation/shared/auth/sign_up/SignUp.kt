@@ -51,7 +51,8 @@ fun SignUpScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize()
     ){
         TrashTrackTheme {
-            val viewModel = SIgnUpVIewModel()
+            val context = LocalContext.current
+            val viewModel = SIgnUpVIewModel(context)
             SignUpScreenContent(
                 viewModel = viewModel,
                 event = viewModel::onEvent,

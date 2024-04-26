@@ -5,19 +5,28 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.auth.FirebaseUser
+import com.samuelokello.trashtrack.data.local.AppDatabase
+import com.samuelokello.trashtrack.data.local.User
+import com.samuelokello.trashtrack.data.repository.RoomUserRepository
 import com.samuelokello.trashtrack.ui.presentation.shared.auth.sign_in.SignInEvent
 import com.samuelokello.trashtrack.util.Utils.auth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class SIgnUpVIewModel : ViewModel() {
+class SIgnUpVIewModel (private val conext: Context): ViewModel() {
 
     private val _state = MutableStateFlow(SignUpUiState())
     val state = _state.asStateFlow()
+
+    private val userRepositroty = RoomUserRepository(userDao = AppDatabase.getDatabase(conext).userDao())
 
     fun onEvent(event: SignUpEvent) {
         when (event) {
@@ -53,6 +62,9 @@ class SIgnUpVIewModel : ViewModel() {
                 if (task.isSuccessful) {
                     Log.d(TAG, "createUserWithEmail:success")
                     val user = auth.currentUser
+                    user.let { user ->
+                        insertUser(user!!)
+                    }
                     Toast.makeText(context, "Authentication Successful", Toast.LENGTH_SHORT).show()
                     _state.update {
                         it.copy(
@@ -93,6 +105,15 @@ class SIgnUpVIewModel : ViewModel() {
                     }
                 }
             }
+    }
+
+    private fun insertUser(user: FirebaseUser) {
+        val localUser = User(
+            email = user.email!!,
+        )
+        viewModelScope.launch {
+            userRepositroty.insertUser(localUser)
+        }
     }
 
     private fun showLoading() {
