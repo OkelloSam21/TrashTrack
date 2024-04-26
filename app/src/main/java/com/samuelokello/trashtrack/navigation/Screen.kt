@@ -6,8 +6,11 @@ enum class Screen {
     SIGN_IN,
     CREATE_PROFILE,
     HOME,
+    ADMIN,
     REPORT,
     REQUEST,
+    PICK_UP_REQUEST,
+    REPORTED_WASTE
 }
 sealed class NavigationItem(val route: String) {
     data object Welcome: NavigationItem(Screen.WELCOME.name)
@@ -15,8 +18,12 @@ sealed class NavigationItem(val route: String) {
     data object signin : NavigationItem(Screen.SIGN_IN.name)
     data object CreateProfile : NavigationItem(Screen.CREATE_PROFILE.name)
     data object Home : NavigationItem(Screen.HOME.name)
+    data object Admin : NavigationItem(Screen.ADMIN.name)
     data object Report : NavigationItem(Screen.REPORT.name)
     data object Request : NavigationItem(Screen.REQUEST.name)
+    data object PickUpRequest : NavigationItem(Screen.PICK_UP_REQUEST.name)
+    data object ReportedWaste : NavigationItem(Screen.REPORTED_WASTE.name)
+
 }
 
 fun getNavigationItem(route: String): NavigationItem {

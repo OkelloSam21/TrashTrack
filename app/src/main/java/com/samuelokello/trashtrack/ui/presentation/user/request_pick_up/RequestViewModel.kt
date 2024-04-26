@@ -1,4 +1,4 @@
-package com.samuelokello.trashtrack.ui.presentation.worker.request_pick_up
+package com.samuelokello.trashtrack.ui.presentation.user.request_pick_up
 
 import android.content.Context
 import android.widget.Toast

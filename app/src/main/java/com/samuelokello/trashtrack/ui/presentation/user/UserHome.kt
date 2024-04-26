@@ -1,4 +1,4 @@
-package com.samuelokello.trashtrack.ui.presentation.worker
+package com.samuelokello.trashtrack.ui.presentation.user
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image

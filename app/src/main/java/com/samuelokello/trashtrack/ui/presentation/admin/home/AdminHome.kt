@@ -1,4 +1,4 @@
-package com.samuelokello.trashtrack.ui.presentation.admin
+package com.samuelokello.trashtrack.ui.presentation.admin.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,15 +28,19 @@ import com.samuelokello.trashtrack.ui.components.WasteReportCard
 @Composable
 fun AdminHomeScreen(navController: NavController) {
     AdminHomeScreenContent(
-        navigateToReports = { },
-        navigateToPickups = { }
+        navigateToReports = { navController.navigate(Screen.REPORTED_WASTE.name)},
+        navigateToPickups = { navController.navigate(Screen.PICK_UP_REQUEST.name)},
+        viewModel = AdminViewModel()
     )
 }
 @Composable
 fun AdminHomeScreenContent(
     navigateToReports: () -> Unit,
-    navigateToPickups: () -> Unit
+    navigateToPickups: () -> Unit,
+    viewModel: AdminViewModel
 ) {
+    val reports = viewModel.reportsCount.collectAsState()
+    val requests = viewModel.requestsCount.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -61,13 +66,13 @@ fun AdminHomeScreenContent(
         )
         WasteReportCard(
             buttonText = " Pick Ups Requested",
-            badgeCount = 0,
+            badgeCount = requests.value,
             onButtonClick = { navigateToPickups()}
         )
         Spacer(modifier = Modifier.height(16.dp))
         WasteReportCard(
             buttonText = "Reported Waste",
-            badgeCount = 0,
+            badgeCount = reports.value,
             onButtonClick = { navigateToReports() }
         )
     }
