@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -52,12 +51,20 @@ fun WelcomeScreen(
             modifier = Modifier
                 .padding(bottom = 20.dp)
         )
-        CustomButton(buttonText = stringResource(id = R.string.signUp), onClick = { navController.navigate(Screen.SIGNUP.name) })
+        CustomButton(
+            buttonText = stringResource(id = R.string.signUp),
+            onClick = { navController.navigate(Screen.SIGNUP.name) },
+            isEnabled = true
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         // Sign In Button
-        CustomButton(buttonText = stringResource(id = R.string.sign_in), onClick = { navController.navigate(Screen.SIGN_IN.name) })
+        CustomButton(
+            buttonText = stringResource(id = R.string.sign_in),
+            onClick = { navController.navigate(Screen.SIGN_IN.name) },
+            isEnabled = true
+        )
     }
 }
 
