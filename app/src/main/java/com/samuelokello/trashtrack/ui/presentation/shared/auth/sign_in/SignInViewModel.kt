@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.samuelokello.trashtrack.data.local.User
 import com.samuelokello.trashtrack.util.Utils.auth
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,7 +49,26 @@ class SignInViewModel : ViewModel() {
                 }
             }
 
-            else -> {}
+            is SignInEvent.ForgotPasswordClicked -> {
+                _state.update {
+                    it.copy(showForgotPasswordDialog = true)
+                }
+            }
+            SignInEvent.ShowDialog -> {
+                _state.update {
+                    it.copy(showForgotPasswordDialog = true)
+                }
+            }
+
+            is SignInEvent.DismissDialog -> {
+                _state.update {
+                    it.copy(showForgotPasswordDialog = false)
+                }
+            }
+
+            is SignInEvent.SendEmail -> {
+                sendEmail(event.email, event.context)
+            }
         }
     }
 
@@ -71,15 +92,19 @@ class SignInViewModel : ViewModel() {
                         _state.update {
                             it.copy(
                                 isLoading = false,
-                                navigateToUserHome = true)
+                                navigateToUserHome = true
+                            )
                         }
                     }
                 } else {
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
                     when (val exception = task.exception) {
-                        is FirebaseAuthInvalidCredentialsException ->
+                        is FirebaseAuthInvalidCredentialsException -> {
                             Toast.makeText(context, "Invalid credentials.", Toast.LENGTH_LONG)
                                 .show()
+                            Log.e(TAG,"signInWithEmail:failure  $exception")
+
+                        }
 
                         is FirebaseAuthUserCollisionException ->
                             Toast.makeText(context, "User collision.", Toast.LENGTH_LONG).show()
@@ -94,6 +119,33 @@ class SignInViewModel : ViewModel() {
                 }
             }
 
+    }
+
+    private fun sendEmail(emailAddress: String, context: Context) {
+        Firebase.auth.sendPasswordResetEmail(emailAddress)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                        context,
+                        "Email sent. Check your inbox.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    _state.update {
+                        it.copy(showForgotPasswordDialog = false)
+                    }
+                } else {
+                    Log.w(
+                        TAG,
+                        "sendPasswordResetEmail:failure  ${task.exception}",
+                        task.exception
+                    )
+                    Toast.makeText(
+                        context,
+                        "Email not sent.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
     }
 
     private fun showLoading() {
@@ -118,12 +170,17 @@ data class SignInUiState(
     val isLoading: Boolean = false,
     val navigateToSignUp: Boolean = false,
     val navigateToUserHome: Boolean = false,
-    val navigateToAdminHome: Boolean = false
+    val navigateToAdminHome: Boolean = false,
+    val showForgotPasswordDialog: Boolean = false
 )
 
 sealed interface SignInEvent {
     data class EmailChanged(val email: String) : SignInEvent
     data class PasswordChanged(val password: String) : SignInEvent
+    data object ForgotPasswordClicked : SignInEvent
+    data object ShowDialog : SignInEvent
+    data object DismissDialog : SignInEvent
+    data class SendEmail(val email: String, val context: Context) : SignInEvent
     data class SignInClicked(
         val email: String,
         val password: String,
@@ -131,6 +188,6 @@ sealed interface SignInEvent {
         val user: User
     ) : SignInEvent
 
-    object NavigateToSignUp : SignInEvent
-    object NavigateToProfileCreation : SignInEvent
+    data object NavigateToSignUp : SignInEvent
+    data object NavigateToProfileCreation : SignInEvent
 }
