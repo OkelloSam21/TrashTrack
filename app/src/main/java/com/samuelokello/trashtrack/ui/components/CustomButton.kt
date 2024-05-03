@@ -3,6 +3,7 @@ package com.samuelokello.trashtrack.ui.components
 import androidx.compose.runtime.Composable
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,14 +19,19 @@ fun CustomButton(
     modifier: Modifier = Modifier,
     textColor: Color = Color.White,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
+    isEnabled: Boolean = false
 ) {
     Button(
         onClick = onClick,
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .height(48.dp),
+        enabled = isEnabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = seed,
-            contentColor = MaterialTheme.colorScheme.onPrimary
+            contentColor = MaterialTheme.colorScheme.onPrimary,
+            disabledContainerColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledContentColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         shape = MaterialTheme.shapes.small
     ) {
