@@ -105,7 +105,8 @@ fun SignUpScreenContent(
                     imageVector = Icons.Default.Email,
                     contentDescription = null
                 )
-            }
+            },
+            singleLine = true
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -137,7 +138,8 @@ fun SignUpScreenContent(
                         context
                     )
                 )
-            }
+            },
+            isEnabled = state.email.isNotEmpty() && state.password.isNotEmpty()
         )
 
         Spacer(modifier = Modifier.height(20.dp))

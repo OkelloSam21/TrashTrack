@@ -107,10 +107,8 @@ fun SignInScreenContent(
             value = state.email,
             onValueChange = {email -> event(SignInEvent.EmailChanged(email))},
             placeholder = "Email",
-            trailingIcon = {
-                Icon(Icons.Default.Email, contentDescription = "Email" )
-
-            }
+            trailingIcon = { Icon(Icons.Default.Email, contentDescription = "Email" ) },
+            singleLine = true
         )
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -147,7 +145,8 @@ fun SignInScreenContent(
                         context,
                         user = user,
                 ))
-            }
+            },
+            isEnabled = state.email.isNotEmpty() && state.password.isNotEmpty()
         )
 
         Spacer(modifier = Modifier.height(10.dp))
