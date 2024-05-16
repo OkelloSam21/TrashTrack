@@ -31,7 +31,6 @@ fun WelcomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Circle ImageView (You may use Coil or other libraries for image loading)
         Image(
             painter = painterResource(R.drawable.undraw_throw_away_re_x60k),
             contentDescription = null,
