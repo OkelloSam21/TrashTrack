@@ -1,4 +1,4 @@
-package com.samuelokello.trashtrack.data.local
+package com.samuelokello.trashtrack.core.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

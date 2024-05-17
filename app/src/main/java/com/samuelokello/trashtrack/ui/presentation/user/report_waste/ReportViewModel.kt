@@ -1,4 +1,4 @@
-package com.samuelokello.trashtrack.ui.presentation.worker.report_waste
+package com.samuelokello.trashtrack.ui.presentation.user.report_waste
 
 import android.content.Context
 import android.widget.Toast

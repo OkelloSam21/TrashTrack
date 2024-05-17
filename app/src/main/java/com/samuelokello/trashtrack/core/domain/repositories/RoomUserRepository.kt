@@ -1,9 +1,9 @@
-package com.samuelokello.trashtrack.data.repository
+package com.samuelokello.trashtrack.core.domain.repositories
 
-import com.samuelokello.trashtrack.data.local.User
-import com.samuelokello.trashtrack.data.local.UserDao
+import com.samuelokello.trashtrack.core.local.entity.User
+import com.samuelokello.trashtrack.core.local.dao.UserDao
 
-class RoomUserRepository(private val userDao: UserDao) : UserRepository{
+class RoomUserRepository(private val userDao: UserDao) : UserRepository {
     override suspend fun userExists(): Boolean {
         val user = userDao.getUser()
         return user != null

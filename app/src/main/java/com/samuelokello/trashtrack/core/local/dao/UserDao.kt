@@ -1,7 +1,9 @@
-package com.samuelokello.trashtrack.data.local
+package com.samuelokello.trashtrack.core.local.dao
 
 import androidx.room.Insert
 import androidx.room.Query
+import com.samuelokello.trashtrack.core.local.entity.Profile
+import com.samuelokello.trashtrack.core.local.entity.User
 
 
 @androidx.room.Dao
