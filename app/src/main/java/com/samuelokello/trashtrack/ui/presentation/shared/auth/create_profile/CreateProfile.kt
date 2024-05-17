@@ -49,7 +49,7 @@ fun CreateProfileScreen(navController: NavController) {
             CreateProfileScreenContent(
                 state = viewModel.state.collectAsState().value,
                 event = viewModel::onEvent,
-                navigateToHome = { navController.navigate(Screen.HOME.name) }
+                navigateToSignIn = { navController.navigate(Screen.SIGN_IN.name) }
             )
         }
     }
@@ -59,15 +59,15 @@ fun CreateProfileScreen(navController: NavController) {
 fun CreateProfileScreenContent(
     state: CreateProfileUiState,
     event: (CreateProfileEvent) -> Unit,
-    navigateToHome: () -> Unit,
+    navigateToSignIn: () -> Unit,
 ) {
     val context = LocalContext.current
 
     if (state.isLoading) HandleLoading()
 
-    LaunchedEffect(state.navigateToHome) {
-        if (state.navigateToHome) {
-            navigateToHome()
+    LaunchedEffect(state.navigateToSignIn) {
+        if (state.navigateToSignIn) {
+            navigateToSignIn()
         }
     }
 
