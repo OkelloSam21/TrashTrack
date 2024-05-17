@@ -42,7 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.samuelokello.trashtrack.R
-import com.samuelokello.trashtrack.data.local.User
+import com.samuelokello.trashtrack.core.local.entity.User
 import com.samuelokello.trashtrack.navigation.Screen
 import com.samuelokello.trashtrack.ui.components.CustomButton
 import com.samuelokello.trashtrack.ui.components.HandleLoading
@@ -62,7 +62,7 @@ fun SignInScreen(navController: NavController) {
                 viewModel = viewModel,
                 event = viewModel::onEvent,
                 navigateToSignUp = { navController.popBackStack() },
-                navigateToCreateProfile = { navController.navigate(Screen.CREATE_PROFILE.name) },
+                navigateToUserHome = { navController.navigate(Screen.HOME.name) },
                 navigateToAdmin = { navController.navigate(Screen.ADMIN.name) }
             )
         }
@@ -74,7 +74,7 @@ fun SignInScreenContent(
     viewModel: SignInViewModel,
     event: (SignInEvent) -> Unit,
     navigateToSignUp: () -> Unit,
-    navigateToCreateProfile: () -> Unit,
+    navigateToUserHome: () -> Unit,
     navigateToAdmin: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
@@ -88,7 +88,10 @@ fun SignInScreenContent(
     }
 
     LaunchedEffect(state.navigateToUserHome) {
-        if (state.navigateToUserHome) navigateToCreateProfile()
+        if (state.navigateToUserHome){
+
+            navigateToUserHome()
+        }
     }
 
     LaunchedEffect(state.navigateToAdminHome) {
@@ -118,7 +121,6 @@ fun SignInScreenContent(
             modifier = Modifier
                 .size(150.dp)
                 .clip(CircleShape)
-                .padding(4.dp)
                 .border(4.dp, Color(0xFF4CAF50), CircleShape)
         )
 

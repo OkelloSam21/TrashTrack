@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.samuelokello.trashtrack.data.local.User
+import com.samuelokello.trashtrack.core.local.entity.User
 import com.samuelokello.trashtrack.util.Utils.auth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
