@@ -59,7 +59,7 @@ fun SignInScreen(navController: NavController) {
         TrashTrackTheme {
             val viewModel = SignInViewModel()
             SignInScreenContent(
-                viewModel = viewModel,
+                state = viewModel.state.value,
                 event = viewModel::onEvent,
                 navigateToSignUp = { navController.popBackStack() },
                 navigateToUserHome = { navController.navigate(Screen.HOME.name) },
@@ -71,13 +71,12 @@ fun SignInScreen(navController: NavController) {
 
 @Composable
 fun SignInScreenContent(
-    viewModel: SignInViewModel,
+    state: SignInUiState,
     event: (SignInEvent) -> Unit,
     navigateToSignUp: () -> Unit,
     navigateToUserHome: () -> Unit,
     navigateToAdmin: () -> Unit
 ) {
-    val state by viewModel.state.collectAsState()
     val context = LocalContext.current
     var visibility by remember { mutableStateOf(false) }
 
@@ -88,10 +87,7 @@ fun SignInScreenContent(
     }
 
     LaunchedEffect(state.navigateToUserHome) {
-        if (state.navigateToUserHome){
-
-            navigateToUserHome()
-        }
+        if (state.navigateToUserHome) navigateToUserHome()
     }
 
     LaunchedEffect(state.navigateToAdminHome) {
